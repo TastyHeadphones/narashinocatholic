@@ -515,3 +515,7 @@ a[href^="tel:"]{white-space:nowrap}
 @media (max-width:600px){
   .prose .agenda-month{font-size:22px}
 }
+
+/* fixes from the third visual review: phrase-level breaks for all Japanese text, heading beside the portrait */
+body{word-break:auto-phrase}
+.intro-split>div>h2:first-child{margin-top:0}
