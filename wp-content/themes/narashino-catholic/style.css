@@ -421,7 +421,7 @@ button.btn:disabled{opacity:.6;cursor:progress}
 .prose .agenda-month{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.4;color:var(--ai);margin:0 0 6px;padding-bottom:12px;border-bottom:2px solid var(--gold)}
 .prose .agenda-month .en{display:inline;margin-left:12px;font-size:17px}
 .prose .agenda{list-style:none;margin:0;padding:0;border-top:1px solid rgba(184,146,74,.5)}
-.prose .agenda li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:24px;align-items:start;padding:20px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
+.prose .agenda li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:24px;align-items:start;padding:20px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
 .prose .agenda-date{display:block}
 .prose .agenda-date .d{display:block;font-family:var(--latin);font-style:italic;font-weight:500;font-size:36px;line-height:1;color:var(--gold-ink)}
 .prose .agenda-date .w{display:block;margin-top:8px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
@@ -461,11 +461,11 @@ button.btn:disabled{opacity:.6;cursor:progress}
 /* photographs */
 .prose .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,36px);margin:8px 0 48px}
 .prose .gallery-item{margin:0}
-.prose .gallery-item img{margin:0;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border:1px solid var(--hair);background:var(--paper)}
+.prose .gallery-item img{margin:0;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border:1px solid var(--hair);background:var(--paper);box-sizing:border-box}
 .prose .gallery-item figcaption{margin-top:12px;font-size:14px;line-height:1.7;color:var(--muted)}
 
 /* Google Maps (shortcode [nc_map]) */
-.map-frame{position:relative;width:100%;aspect-ratio:16/10;min-height:320px;margin:8px 0 20px;border:1px solid var(--gold);background:var(--paper)}
+.map-frame{position:relative;width:100%;aspect-ratio:16/10;min-height:320px;margin:8px 0 20px;border:1px solid var(--gold);background:var(--paper);box-sizing:border-box}
 .map-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .prose .map-actions{margin:0 0 56px}
 
@@ -492,3 +492,17 @@ a[href^="tel:"]{white-space:nowrap}
 
 /* table rows marked as feasts (movable feasts) */
 .prose tr.is-feast th,.prose tr.is-feast td{color:var(--vermilion)}
+
+/* fixes from the visual review */
+.prose .timeline .tl-body p:has(.tl-month){padding-left:3.8em;text-indent:-3.8em}
+.page-title,.prose h2,.prose h3{word-break:auto-phrase}
+.quick b,.prose .qa dt{line-break:strict}
+.prose .qa dt{text-wrap:balance}
+.prose .qa dt+dt{margin-top:12px}
+@media (max-width:600px){
+  .prose table{min-width:440px}
+  .prose th,.prose td{padding:14px 10px}
+  .prose td{white-space:nowrap}
+  .prose .agenda li{grid-template-columns:88px minmax(0,1fr)}
+  .prose .agenda-date .w{white-space:nowrap}
+}

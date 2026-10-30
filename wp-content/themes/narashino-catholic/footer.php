@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 					<p class="label">CONTACT · お問い合わせ</p>
 					<h2 class="h2">お問い合わせ<span class="en">Contact &amp; access</span></h2>
 				</div>
-				<a class="btn fill-gold" href="<?php echo esc_url( nc_url( 'contact' ) ); ?>">お問い合わせフォーム <span class="en">Contact form</span></a>
+				<a class="btn fill-gold" href="<?php echo esc_url( nc_url( 'contact' ) ); ?>">お問い合わせ <span class="en">Contact</span></a>
 			</div>
 			<div class="foot-grid">
 				<div>
