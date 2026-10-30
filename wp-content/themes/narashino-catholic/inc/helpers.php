@@ -135,3 +135,19 @@ function nc_arrow() {
 function nc_tel_href( $number ) {
 	return 'tel:' . preg_replace( '/[^0-9+]/', '', $number );
 }
+
+/**
+ * 本文を HTML のまま出力する。
+ *
+ * 固定ページの本文はレイアウト用の HTML（カードや一覧）で書かれているため、
+ * 段落の自動挿入（wpautop）を止める。
+ */
+function nc_the_content() {
+	remove_filter( 'the_content', 'wpautop' );
+	remove_filter( 'the_content', 'shortcode_unautop' );
+
+	the_content();
+
+	add_filter( 'the_content', 'wpautop' );
+	add_filter( 'the_content', 'shortcode_unautop' );
+}

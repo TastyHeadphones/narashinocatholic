@@ -43,7 +43,7 @@ while ( have_posts() ) :
 			<div class="wrap">
 				<?php if ( $has_body ) : ?>
 					<div class="prose">
-						<?php the_content(); ?>
+						<?php nc_the_content(); ?>
 					</div>
 				<?php elseif ( ! $children ) : ?>
 					<p class="empty">このページの内容は準備中です。ご不明な点は教会事務室（電話 <?php echo esc_html( nc_parish( 'phone' ) ); ?>）までお問い合わせください。</p>

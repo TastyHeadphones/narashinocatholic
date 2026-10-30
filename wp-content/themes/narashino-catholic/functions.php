@@ -16,3 +16,4 @@ require_once get_theme_file_path( 'inc/pages.php' );
 require_once get_theme_file_path( 'inc/notices.php' );
 require_once get_theme_file_path( 'inc/nav.php' );
 require_once get_theme_file_path( 'inc/contact.php' );
+require_once get_theme_file_path( 'inc/map.php' );

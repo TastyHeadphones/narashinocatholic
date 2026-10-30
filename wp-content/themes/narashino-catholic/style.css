@@ -299,7 +299,7 @@ a{color:var(--ai);text-decoration-thickness:1px;text-underline-offset:4px}
 .page-body .wrap > *:first-child{margin-top:0}
 .lead-ja{font-size:18px;line-height:2;color:var(--ink);max-width:36em;margin:0 0 40px}
 
-.prose{font-size:17px;line-height:2;color:var(--ink);max-width:46em}
+.prose{font-size:17px;line-height:2;color:var(--ink)}
 .prose > :first-child{margin-top:0}
 .prose h2{font-family:var(--serif);font-size:clamp(24px,2.6vw,30px);line-height:1.5;color:var(--ai);margin:56px 0 16px;font-weight:700;text-wrap:balance}
 .prose h3{font-family:var(--serif);font-size:20px;line-height:1.6;color:var(--ai);margin:36px 0 10px;font-weight:700}
@@ -391,11 +391,95 @@ button.btn:disabled{opacity:.6;cursor:progress}
   .nav{gap:0 14px}
   .announce .wrap{padding-left:16px;padding-right:16px}
   .hero h1{font-size:clamp(40px,11vw,56px)}
-  .prose table{min-width:0}
-  .prose thead{display:none}
-  .prose table,.prose tbody,.prose tr,.prose th,.prose td{display:block;width:100%}
-  .prose tr{border-bottom:1px solid var(--hair);padding:12px 0}
-  .prose th,.prose td{border-bottom:0;padding:6px 0}
-  .prose tbody th{width:100%}
-  .prose .table-wrap{overflow:visible;margin:24px 0 32px}
+}
+
+/* ---------------------------------------------------------------
+   Content components (used inside .prose on inner pages).
+   The layouts follow the design: hairline gold rules, serif
+   headings, latin italic numerals, and vermilion for feasts.
+   --------------------------------------------------------------- */
+
+/* text blocks read at a comfortable measure; components span the page */
+.prose > p,.prose > ul,.prose > ol,.prose > h2,.prose > h3,.prose > .note,.prose > .notice-note,.prose > .byline,.prose > .lead-ja,.prose > .empty{max-width:46em}
+.prose h2 .en,.prose h3 .en{display:block;font-family:var(--latin);font-style:italic;font-weight:500;font-size:.62em;letter-spacing:.01em;color:var(--muted);margin-top:8px}
+.prose h3{font-size:21px;line-height:1.5;margin:40px 0 12px;color:var(--ai)}
+.prose .byline{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--muted);margin:0 0 32px}
+.prose .lead-ja + p{margin-top:0}
+
+/* service and activity cards: reuse the home-page cards inside content */
+.prose .mass-grid,.prose .act-grid{margin:8px 0 48px}
+.prose .mass-grid--four{grid-template-columns:repeat(2,minmax(0,1fr))}
+.prose .mc h3,.prose .act h3{margin:0;font-size:28px;line-height:1.35;color:var(--ai)}
+.prose .act h3{font-size:24px}
+.prose .mc .en,.prose .act .en{display:block;margin:6px 0 0}
+.prose .mc .time{margin-top:auto;padding-top:28px;font-size:20px;line-height:1.7}
+.prose .mc .time .sub{display:block;margin-top:12px;font-size:15px;line-height:1.8;color:var(--muted)}
+.prose .act .when{margin:14px 0 0;font-size:17px;font-weight:700;line-height:1.6;color:var(--ai)}
+.prose .act .desc{margin:12px 0 0;font-size:15px;line-height:1.85;color:var(--muted)}
+.prose .act{min-height:0}
+
+/* dated lists: schedules, calendars, monthly notices */
+.prose .agenda-group{margin:0 0 56px}
+.prose .agenda-month{font-family:var(--serif);font-weight:700;font-size:26px;line-height:1.4;color:var(--ai);margin:0 0 6px;padding-bottom:12px;border-bottom:2px solid var(--gold)}
+.prose .agenda-month .en{display:inline;margin-left:12px;font-size:17px}
+.prose .agenda{list-style:none;margin:0;padding:0;border-top:1px solid rgba(184,146,74,.5)}
+.prose .agenda li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:24px;align-items:start;padding:20px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
+.prose .agenda-date{display:block}
+.prose .agenda-date .d{display:block;font-family:var(--latin);font-style:italic;font-weight:500;font-size:36px;line-height:1;color:var(--gold-ink)}
+.prose .agenda-date .w{display:block;margin-top:8px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+.prose .agenda-title{margin:0;font-family:var(--serif);font-weight:700;font-size:20px;line-height:1.55;color:var(--ai)}
+.prose .agenda-note{margin:6px 0 0;font-size:15px;line-height:1.85;color:var(--muted)}
+.prose .agenda li.is-feast .agenda-title,.prose .agenda li.is-feast .d{color:var(--vermilion)}
+
+/* history */
+.prose .timeline{list-style:none;margin:8px 0 56px;padding:0;border-top:1px solid rgba(184,146,74,.5)}
+.prose .timeline li{display:grid;grid-template-columns:160px minmax(0,1fr);gap:28px;padding:26px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
+.prose .tl-year{margin:0;font-family:var(--latin);font-style:italic;font-weight:500;font-size:44px;line-height:1;color:var(--gold-ink)}
+.prose .tl-unit{font-family:var(--sans);font-style:normal;font-size:15px;margin-left:4px;color:var(--muted)}
+.prose .tl-body p{margin:0 0 8px;font-size:17px;line-height:1.85}
+.prose .tl-body p:last-child{margin-bottom:0}
+.prose .tl-month{display:inline-block;min-width:3.4em;margin-right:.4em;font-family:var(--serif);font-weight:700;color:var(--ai)}
+
+/* key-value rows (contact details, office hours) */
+.prose .info{display:grid;margin:8px 0 48px;border-top:1px solid rgba(184,146,74,.5)}
+.prose .info > div{display:grid;grid-template-columns:9.5em minmax(0,1fr);gap:16px;padding:16px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
+.prose .info dt{font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--ai);padding-top:5px}
+.prose .info dd{margin:0;font-size:17px;line-height:1.8}
+
+/* questions and answers */
+.prose .qa{margin:8px 0 48px}
+.prose .qa > div{padding:24px 0;margin:0;border-bottom:1px solid rgba(184,146,74,.5)}
+.prose .qa dt{font-family:var(--serif);font-weight:700;font-size:19px;line-height:1.6;color:var(--ai)}
+.prose .qa dd{margin:10px 0 0;font-size:17px;line-height:2}
+.prose .qa dd p{margin:0 0 10px}
+.prose .qa dd p:last-child{margin-bottom:0}
+
+/* portrait with text beside it */
+.prose .intro-split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(40px,5vw,80px);align-items:start;margin:8px 0 56px}
+.prose .intro-split > div{min-width:0}
+.prose figure.portrait{margin:0;max-width:none}
+.prose figure.portrait img{margin:0;border:0;background:none;width:100%;height:100%}
+
+/* photographs */
+.prose .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,3vw,36px);margin:8px 0 48px}
+.prose .gallery-item{margin:0}
+.prose .gallery-item img{margin:0;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border:1px solid var(--hair);background:var(--paper)}
+.prose .gallery-item figcaption{margin-top:12px;font-size:14px;line-height:1.7;color:var(--muted)}
+
+/* Google Maps (shortcode [nc_map]) */
+.map-frame{position:relative;width:100%;aspect-ratio:16/10;min-height:320px;margin:8px 0 20px;border:1px solid var(--gold);background:var(--paper)}
+.map-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.prose .map-actions{margin:0 0 56px}
+
+@media (max-width:860px){
+  .prose .intro-split{grid-template-columns:minmax(0,1fr)}
+  .prose .mass-grid--four{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){
+  .prose .agenda li{grid-template-columns:72px minmax(0,1fr);gap:16px}
+  .prose .agenda-date .d{font-size:30px}
+  .prose .timeline li{grid-template-columns:minmax(0,1fr);gap:6px}
+  .prose .tl-year{font-size:36px}
+  .prose .info > div{grid-template-columns:minmax(0,1fr);gap:4px}
+  .prose .gallery{grid-template-columns:minmax(0,1fr)}
 }

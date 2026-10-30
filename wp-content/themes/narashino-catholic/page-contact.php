@@ -32,7 +32,7 @@ while ( have_posts() ) :
 		<section class="page-body">
 			<div class="wrap">
 				<?php if ( $has_body ) : ?>
-					<div class="prose"><?php the_content(); ?></div>
+					<div class="prose"><?php nc_the_content(); ?></div>
 				<?php endif; ?>
 
 				<?php if ( $result ) : ?>

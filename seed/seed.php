@@ -1,6 +1,6 @@
 <?php
 /**
- * 教会サイトの初期データを投入する（固定ページ、画像、お知らせ、メニュー）。
+ * 教会サイトの初期データを投入する（固定ページ、写真、お知らせ、メニュー）。
  *
  * 実行方法（テーマを有効化してから）:
  *   wp eval-file /seed/seed.php
@@ -8,7 +8,10 @@
  * 既定では、まだ無いものだけを作成する。管理画面で編集した内容は上書きしない。
  * NC_SEED_FORCE=1 を付けると、固定ページ・お知らせ・メニューを初期内容に戻す
  * （教会情報の設定は上書きしない）。
- * 内容の出典は現在の公式サイト（https://www.narashinocatholic.com/）。
+ *
+ * 本文は seed/pages/*.html（レイアウト用の HTML）をそのまま使う。
+ * 写真は seed/photos/ のファイルを取り込む（外部のサイトからは取得しない）。
+ * 地図は本文の [nc_map] ショートコードで Google マップを表示する。
  *
  * @package NarashinoCatholic
  */
@@ -21,6 +24,9 @@ require_once ABSPATH . 'wp-admin/includes/file.php';
 require_once ABSPATH . 'wp-admin/includes/media.php';
 require_once ABSPATH . 'wp-admin/includes/image.php';
 
+// 初期データは信頼できる内容なので、保存時に HTML を書き換えない（カードや属性を保つため）。
+kses_remove_filters();
+
 /**
  * 固定ページの定義。親を先に並べること。
  *
@@ -31,9 +37,9 @@ $nc_seed_pages = array(
 	'parish'        => array( 'title' => '教会案内', 'slug' => '教会案内', 'en' => 'About the parish' ),
 	'mass'          => array( 'title' => 'ミサのご案内', 'slug' => 'ミサのご案内', 'parent' => 'parish', 'en' => 'Mass times', 'content' => 'mass.html' ),
 	'monthly'       => array( 'title' => '毎月のお知らせ', 'slug' => '毎月のお知らせ', 'parent' => 'parish', 'en' => 'Monthly notices', 'content' => 'monthly.html' ),
-	'sacraments'    => array( 'title' => '秘跡（SACRAMENTS)', 'slug' => '秘跡-sacraments', 'parent' => 'parish', 'en' => 'Sacraments' ),
+	'sacraments'    => array( 'title' => '秘跡（SACRAMENTS)', 'slug' => '秘跡-sacraments', 'parent' => 'parish', 'en' => 'Sacraments', 'content' => 'sacraments.html' ),
 	'courses'       => array( 'title' => '各講座の案内', 'slug' => '各講座の案内', 'parent' => 'parish', 'en' => 'Classes and courses', 'content' => 'courses.html' ),
-	'movable'       => array( 'title' => '年間移動祝日一覧', 'slug' => '年間移動祝日一覧', 'parent' => 'parish', 'en' => 'Movable feasts' ),
+	'movable'       => array( 'title' => '年間移動祝日一覧', 'slug' => '年間移動祝日一覧', 'parent' => 'parish', 'en' => 'Movable feasts', 'content' => 'movable.html' ),
 	'calendar'      => array( 'title' => '年間典礼行事予定', 'slug' => '年間典礼行事予定', 'parent' => 'parish', 'en' => 'Liturgical calendar', 'content' => 'calendar.html' ),
 	'anniversary'   => array( 'title' => '50周年記念ミサ関連', 'slug' => '50周年記念ミサ関連', 'parent' => 'parish', 'en' => '50th anniversary', 'content' => 'anniversary.html' ),
 	'gallery'       => array( 'title' => '50周年記念ミサギャラリー', 'slug' => '50周年記念ミサギャラリー', 'parent' => 'anniversary', 'en' => 'Anniversary Mass gallery', 'content' => 'gallery.html' ),
@@ -97,28 +103,32 @@ function nc_seed_tally( $type = '', $outcome = '' ) {
 }
 
 /**
- * 画像を取り込む。失敗したら 0 を返す。
+ * ローカルの写真をメディアライブラリに取り込む。失敗したら 0 を返す。
  *
- * @param string $key  画像の識別子（ファイル名にも使う）。
- * @param string $url  取得元のURL。
- * @param string $alt  代替テキスト。
+ * @param string $file  写真のパス。
+ * @param string $title 添付ファイルの見出し。
+ * @param string $alt   代替テキスト。
  * @return int 添付ファイルのID。
  */
-function nc_seed_sideload( $key, $url, $alt ) {
-	$tmp = download_url( $url, 60 );
-
-	if ( is_wp_error( $tmp ) ) {
+function nc_seed_import_photo( $file, $title, $alt ) {
+	if ( ! is_readable( $file ) ) {
 		return 0;
 	}
 
-	$ext = strtolower( pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
-	$id  = media_handle_sideload(
+	$tmp = wp_tempnam( basename( $file ) );
+
+	if ( ! $tmp || ! copy( $file, $tmp ) ) {
+		return 0;
+	}
+
+	$id = media_handle_sideload(
 		array(
-			'name'     => $key . '.' . $ext,
+			'name'     => basename( $file ),
 			'tmp_name' => $tmp,
 		),
 		0,
-		$alt
+		$title,
+		array( 'post_title' => $title )
 	);
 
 	if ( is_wp_error( $id ) ) {
@@ -134,57 +144,50 @@ function nc_seed_sideload( $key, $url, $alt ) {
 }
 
 /**
- * 画像をまとめて取り込む（取り込み済みのものは再利用）。
+ * 写真をまとめて取り込む（取り込み済みのものは再利用）。
  *
  * @param string $seed_dir シードのディレクトリ。
- * @return array{images: array<string, int>, manifest: array<string, array{url: string, alt: string}>}
+ * @return array{ids: array<string, int>, manifest: array<string, array{file: string, title: string, alt: string}>}
  */
-function nc_seed_images( $seed_dir ) {
-	$manifest = json_decode( (string) file_get_contents( $seed_dir . '/images.json' ), true );
-	$stored   = get_option( 'nc_image_ids', array() );
+function nc_seed_photos( $seed_dir ) {
+	$manifest = json_decode( (string) file_get_contents( $seed_dir . '/photos.json' ), true );
+	$stored   = get_option( 'nc_photo_ids', array() );
 	$ids      = array();
 
 	foreach ( $manifest as $key => $item ) {
 		$id = isset( $stored[ $key ] ) ? (int) $stored[ $key ] : 0;
 
 		if ( ! $id || ! get_post( $id ) ) {
-			$id = nc_seed_sideload( $key, $item['url'], $item['alt'] );
+			$id = nc_seed_import_photo( $seed_dir . '/' . $item['file'], $item['title'], $item['alt'] );
 		}
 
 		if ( $id ) {
 			$ids[ $key ] = $id;
 		} else {
-			nc_seed_message( '画像を取り込めませんでした（元のURLを使用します）: ' . $key );
+			nc_seed_message( '写真を取り込めませんでした: ' . $item['file'] );
 		}
 	}
 
-	update_option( 'nc_image_ids', $ids );
+	update_option( 'nc_photo_ids', $ids );
 
 	return array(
-		'images'   => $ids,
+		'ids'      => $ids,
 		'manifest' => $manifest,
 	);
 }
 
 /**
- * 本文のプレースホルダ（{{img:key}}）を実際のURLに置き換える。
+ * 本文の {{photo:key}} を取り込んだ写真のURLに置き換える。
  *
- * @param string $html     本文。
- * @param array  $images   取り込み済みの画像ID。
- * @param array  $manifest 画像の定義（取り込めなかった場合のURL）。
+ * @param string $html   本文。
+ * @param array  $photos 取り込み済みの写真ID。
  * @return string
  */
-function nc_seed_fill_images( $html, $images, $manifest ) {
+function nc_seed_fill_photos( $html, $photos ) {
 	return (string) preg_replace_callback(
-		'/\{\{img:([a-z0-9-]+)\}\}/',
-		static function ( $match ) use ( $images, $manifest ) {
-			$key = $match[1];
-
-			if ( isset( $images[ $key ] ) ) {
-				return (string) wp_get_attachment_url( $images[ $key ] );
-			}
-
-			return isset( $manifest[ $key ] ) ? $manifest[ $key ]['url'] : '';
+		'/\{\{photo:([a-z0-9-]+)\}\}/',
+		static function ( $match ) use ( $photos ) {
+			return isset( $photos[ $match[1] ] ) ? (string) wp_get_attachment_url( $photos[ $match[1] ] ) : '';
 		},
 		$html
 	);
@@ -194,13 +197,12 @@ function nc_seed_fill_images( $html, $images, $manifest ) {
  * 固定ページを作成する（既存のページは $force のときだけ初期内容に戻す）。
  *
  * @param array  $pages    固定ページの定義。
- * @param array  $images   取り込み済みの画像ID。
- * @param array  $manifest 画像の定義。
+ * @param array  $photos   取り込み済みの写真ID。
  * @param string $seed_dir シードのディレクトリ。
  * @param bool   $force    既存の内容を上書きするか。
  * @return array<string, int> 識別子 => ページID。
  */
-function nc_seed_pages( $pages, $images, $manifest, $seed_dir, $force ) {
+function nc_seed_pages( $pages, $photos, $seed_dir, $force ) {
 	$ids   = get_option( NC_PAGES_OPTION, array() );
 	$order = 0;
 
@@ -218,10 +220,9 @@ function nc_seed_pages( $pages, $images, $manifest, $seed_dir, $force ) {
 		$content = '';
 
 		if ( ! empty( $spec['content'] ) ) {
-			$content = nc_seed_fill_images(
+			$content = nc_seed_fill_photos(
 				(string) file_get_contents( $seed_dir . '/pages/' . $spec['content'] ),
-				$images,
-				$manifest
+				$photos
 			);
 		}
 
@@ -252,8 +253,8 @@ function nc_seed_pages( $pages, $images, $manifest, $seed_dir, $force ) {
 			update_post_meta( $id, '_nc_en_title', $spec['en'] );
 		}
 
-		if ( ! empty( $spec['image'] ) && isset( $images[ $spec['image'] ] ) ) {
-			set_post_thumbnail( $id, $images[ $spec['image'] ] );
+		if ( ! empty( $spec['image'] ) && isset( $photos[ $spec['image'] ] ) ) {
+			set_post_thumbnail( $id, $photos[ $spec['image'] ] );
 		}
 
 		nc_seed_tally( 'pages', $existing ? 'updated' : 'created' );
@@ -404,9 +405,9 @@ function nc_seed_menu( $name, $location, $items, $force ) {
 	nc_seed_tally( 'menus', $existing ? 'updated' : 'created' );
 }
 
-// 1. 画像 → 2. 固定ページ → 3. ページ間リンク → 4. お知らせ → 5. メニューと設定。
-$nc_seed_media = nc_seed_images( __DIR__ );
-$nc_seed_ids   = nc_seed_pages( $nc_seed_pages, $nc_seed_media['images'], $nc_seed_media['manifest'], __DIR__, $nc_seed_force );
+// 1. 写真 → 2. 固定ページ → 3. ページ間リンク → 4. お知らせ → 5. メニューと設定。
+$nc_seed_media = nc_seed_photos( __DIR__ );
+$nc_seed_ids   = nc_seed_pages( $nc_seed_pages, $nc_seed_media['ids'], __DIR__, $nc_seed_force );
 nc_seed_link_pages( $nc_seed_pages, $nc_seed_ids );
 nc_seed_notices( __DIR__, $nc_seed_force );
 
@@ -463,6 +464,7 @@ foreach ( $nc_seed_defaults as $default ) {
 	}
 }
 
+kses_init_filters();
 flush_rewrite_rules( false );
 
 $nc_seed_labels   = array(
@@ -488,4 +490,4 @@ foreach ( nc_seed_tally() as $type => $outcomes ) {
 	nc_seed_message( $nc_seed_labels[ $type ] . '：' . implode( '、', $parts ) );
 }
 
-nc_seed_message( '画像：' . count( $nc_seed_media['images'] ) . ' 件 取り込み済み' );
+nc_seed_message( '写真：' . count( $nc_seed_media['ids'] ) . ' 件 取り込み済み' );

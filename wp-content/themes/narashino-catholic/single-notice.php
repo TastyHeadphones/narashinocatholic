@@ -51,7 +51,7 @@ while ( have_posts() ) :
 				<?php endif; ?>
 
 				<div class="prose">
-					<?php the_content(); ?>
+					<?php nc_the_content(); ?>
 					<?php if ( $desc_en ) : ?>
 						<p class="en"><?php echo esc_html( $desc_en ); ?></p>
 					<?php endif; ?>
