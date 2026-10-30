@@ -1,0 +1,10 @@
+<svg class="seal" viewBox="0 0 160 160" aria-hidden="true">
+        <rect width="160" height="160" fill="#B0402A"/>
+        <rect x="9" y="9" width="142" height="142" fill="none" stroke="#F4EFE4" stroke-width="1.5" stroke-opacity=".8"/>
+        <g font-family="Shippori Mincho, serif" font-size="28" font-weight="700" fill="#F4EFE4" text-anchor="middle">
+          <text x="80" y="47">五</text>
+          <text x="80" y="79">十</text>
+          <text x="80" y="111">周</text>
+          <text x="80" y="143">年</text>
+        </g>
+      </svg>

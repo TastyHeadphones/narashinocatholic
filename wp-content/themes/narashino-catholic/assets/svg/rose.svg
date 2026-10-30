@@ -1,0 +1,26 @@
+<svg class="rose-svg" viewBox="0 0 600 600" role="img" aria-label="七宝模様のバラ窓と中央の十字架">
+        <defs>
+          <pattern id="shippo" width="112" height="112" patternUnits="userSpaceOnUse">
+            <rect width="112" height="112" fill="#F4EFE4"/>
+            <path d="M28 19.3A34 34 0 0 0 36.7 28A34 34 0 0 0 28 36.7A34 34 0 0 0 19.3 28A34 34 0 0 0 28 19.3Z" fill="#1B2750"/>
+            <path d="M84 19.3A34 34 0 0 0 92.7 28A34 34 0 0 0 84 36.7A34 34 0 0 0 75.3 28A34 34 0 0 0 84 19.3Z" fill="#B0402A"/>
+            <path d="M28 75.3A34 34 0 0 0 36.7 84A34 34 0 0 0 28 92.7A34 34 0 0 0 19.3 84A34 34 0 0 0 28 75.3Z" fill="#B8924A"/>
+            <path d="M84 75.3A34 34 0 0 0 92.7 84A34 34 0 0 0 84 92.7A34 34 0 0 0 75.3 84A34 34 0 0 0 84 75.3Z" fill="#5F6F4C"/>
+            <g fill="none" stroke="#22211E" stroke-width="2.2">
+              <circle cx="0" cy="0" r="34"/><circle cx="56" cy="0" r="34"/><circle cx="112" cy="0" r="34"/>
+              <circle cx="0" cy="56" r="34"/><circle cx="56" cy="56" r="34"/><circle cx="112" cy="56" r="34"/>
+              <circle cx="0" cy="112" r="34"/><circle cx="56" cy="112" r="34"/><circle cx="112" cy="112" r="34"/>
+            </g>
+          </pattern>
+        </defs>
+        <g class="rose">
+          <circle cx="300" cy="300" r="292" fill="#E0BF78" fill-opacity=".12"/>
+          <circle cx="300" cy="300" r="272" fill="none" stroke="#E0BF78" stroke-opacity=".45" stroke-width="1.5"/>
+          <circle class="rose-pattern" cx="300" cy="300" r="250" fill="url(#shippo)"/>
+          <circle cx="300" cy="300" r="250" fill="none" stroke="#B8924A" stroke-width="9"/>
+          <circle cx="300" cy="300" r="236" fill="none" stroke="#22211E" stroke-width="3"/>
+          <circle cx="300" cy="300" r="66" fill="#F4EFE4" stroke="#B8924A" stroke-width="4"/>
+          <rect x="294" y="256" width="12" height="88" style="fill: var(--ai)"/>
+          <rect x="274" y="280" width="52" height="12" style="fill: var(--ai)"/>
+        </g>
+      </svg>

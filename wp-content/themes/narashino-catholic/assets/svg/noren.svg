@@ -1,0 +1,14 @@
+<svg class="noren" viewBox="0 0 1280 160" aria-hidden="true">
+  <rect width="1280" height="12" fill="#2E2A26"/>
+  <g style="fill: var(--ai-tint)">
+    <path d="M16 12H162V150L89 136L16 150Z"/>
+    <path d="M174 12H320V150L247 136L174 150Z"/>
+    <path d="M332 12H478V150L405 136L332 150Z"/>
+    <path d="M490 12H636V150L563 136L490 150Z"/>
+    <path d="M648 12H794V150L721 136L648 150Z"/>
+    <path d="M806 12H952V150L879 136L806 150Z"/>
+    <path d="M964 12H1110V150L1037 136L964 150Z"/>
+    <path d="M1122 12H1268V150L1195 136L1122 150Z"/>
+  </g>
+  <path d="M16 26H162M174 26H320M332 26H478M490 26H636M648 26H794M806 26H952M964 26H1110M1122 26H1268" stroke="#E0BF78" stroke-width="1.5" fill="none"/>
+</svg>

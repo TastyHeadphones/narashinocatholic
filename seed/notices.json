@@ -1,0 +1,35 @@
+[
+  {
+    "title": "10月31日の清掃はお休みです",
+    "tag": "10.31（土）",
+    "title_en": "No cleaning on October 31",
+    "excerpt": "聖堂の空調設備の改修工事のためです。",
+    "desc_en": "The sanctuary air-conditioning is being renovated.",
+    "body": "<p>聖堂の空調設備の改修工事のため、10月31日（土）の清掃は中止となります。</p>",
+    "warn": false,
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "title": "偽のSNSアカウントにご注意ください",
+    "tag": "注意",
+    "title_en": "Beware of fake social media accounts",
+    "excerpt": "菊地枢機卿を名乗り、寄付を求めるアカウントがあります。",
+    "desc_en": "Accounts impersonating Cardinal Kikuchi are asking for donations.",
+    "body": "<p>菊地枢機卿を装ったSNSアカウントからの寄付依頼にご注意ください。詳しくは東京教区のページをご覧ください。</p>",
+    "warn": true,
+    "link_url": "https://tokyo.catholic.jp/info/diocese/51557/",
+    "link_label": "東京教区のページ（外部サイト）"
+  },
+  {
+    "title": "今後の感染対策について",
+    "tag": "東京大司教区",
+    "title_en": "Infection-control measures",
+    "excerpt": "東京大司教区からのお知らせです。",
+    "desc_en": "A notice from the Archdiocese of Tokyo.",
+    "body": "<p>東京大司教区における今後の感染症対策に関して、東京大司教区のページをご覧ください。</p>",
+    "warn": false,
+    "link_url": "https://tokyo.catholic.jp/info/disaster/49938/",
+    "link_label": "東京大司教区のページ（外部サイト）"
+  }
+]
