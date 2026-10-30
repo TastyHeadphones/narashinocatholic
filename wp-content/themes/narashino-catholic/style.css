@@ -489,3 +489,6 @@ a[href^="tel:"]{white-space:nowrap}
 .mc .sub{display:block;margin:0 0 14px;font-size:15px;line-height:1.8;color:var(--muted)}
 .flinks a .en{margin-left:.5em;font-size:.85em;color:var(--muted)}
 .flinks a:hover .en{color:var(--vermilion)}
+
+/* table rows marked as feasts (movable feasts) */
+.prose tr.is-feast th,.prose tr.is-feast td{color:var(--vermilion)}
