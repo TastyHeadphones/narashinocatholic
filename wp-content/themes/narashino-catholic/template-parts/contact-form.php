@@ -2,12 +2,14 @@
 /**
  * お問い合わせフォーム（送信先はメール。内容はデータベースに保存しない）。
  *
+ * 送信に失敗した場合の入力内容は、ブラウザのセッション内だけで復元する（assets/js/contact.js）。
+ *
  * @package NarashinoCatholic
  */
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<form class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+<form id="nc-contact-form" class="form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 	<input type="hidden" name="action" value="nc_contact">
 	<?php wp_nonce_field( 'nc_contact', 'nc_contact_nonce' ); ?>
 

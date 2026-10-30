@@ -11,9 +11,9 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	$post_id   = get_the_ID();
 	$tag       = nc_notice_meta( '_nc_tag' );
 	$warn      = '1' === nc_notice_meta( '_nc_warn' );
+	$show_date = '1' === nc_notice_meta( '_nc_show_date' );
 	$en        = nc_notice_meta( '_nc_title_en' );
 	$desc_en   = nc_notice_meta( '_nc_desc_en' );
 	$link_url  = nc_notice_meta( '_nc_link_url' );
@@ -37,16 +37,20 @@ while ( have_posts() ) :
 
 		<section class="page-body">
 			<div class="wrap">
-				<div class="notice-head">
-					<div class="meta">
-						<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'Y年n月j日' ) ); ?></time>
-						<?php if ( $tag ) : ?>
-							<span class="tz-tag<?php echo $warn ? ' warn' : ''; ?>"><?php echo esc_html( $tag ); ?></span>
-						<?php endif; ?>
+				<?php if ( $show_date || $tag ) : ?>
+					<div class="notice-head">
+						<div class="meta">
+							<?php if ( $show_date ) : ?>
+								<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'Y年n月j日' ) ); ?></time>
+							<?php endif; ?>
+							<?php if ( $tag ) : ?>
+								<span class="tz-tag<?php echo $warn ? ' warn' : ''; ?>"><?php echo esc_html( $tag ); ?></span>
+							<?php endif; ?>
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
 
-				<?php if ( get_the_excerpt() ) : ?>
+				<?php if ( has_excerpt() ) : ?>
 					<p class="notice-note"><?php echo esc_html( wp_strip_all_tags( get_the_excerpt() ) ); ?></p>
 				<?php endif; ?>
 

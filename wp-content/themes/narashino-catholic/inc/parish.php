@@ -28,6 +28,7 @@ function nc_parish_fields() {
 		'weekday_mass'       => array( '平日のミサ（時間）', 'text' ),
 		'confession'         => array( 'ゆるしの秘跡（告解）', 'text' ),
 		'cleaning'           => array( '教会の清掃（日時）', 'text' ),
+		'cleaning_en'        => array( '教会の清掃（英語の表記）', 'text' ),
 		'directions'         => array( '最寄り駅からの道順', 'textarea' ),
 		'announcement'       => array( 'お知らせバーの文言（空欄で非表示）', 'text' ),
 		'announcement_en'    => array( 'お知らせバーの英語文言', 'text' ),

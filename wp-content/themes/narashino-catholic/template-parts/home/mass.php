@@ -23,18 +23,16 @@ defined( 'ABSPATH' ) || exit;
 				<p class="label">SUNDAY</p>
 				<h3>主日のミサ</h3>
 				<p class="en">Sunday Mass</p>
-				<p class="time">
-					<?php echo esc_html( nc_parish( 'sunday_mass' ) ); ?>
-					<?php if ( nc_parish( 'sunday_mass_note' ) ) : ?>
-					<span class="sub"><?php echo esc_html( nc_parish( 'sunday_mass_note' ) ); ?></span>
-					<?php endif; ?>
-				</p>
+				<?php if ( nc_parish( 'sunday_mass_note' ) ) : ?>
+					<p class="sub"><?php echo esc_html( nc_parish( 'sunday_mass_note' ) ); ?></p>
+				<?php endif; ?>
+				<p class="time"><?php echo esc_html( nc_parish( 'sunday_mass' ) ); ?></p>
 			</article>
 			<article class="mc">
-				<span class="kanji" aria-hidden="true">平</span>
-				<p class="label">WEEKDAY</p>
-				<h3>平日のミサ</h3>
-				<p class="en">Weekday Mass</p>
+				<span class="kanji" aria-hidden="true">金</span>
+				<p class="label">FRIDAY</p>
+				<h3>金曜日のミサ</h3>
+				<p class="en">Friday Mass</p>
 				<p class="time"><?php echo esc_html( trim( nc_parish( 'weekday_mass_label' ) . ' ' . nc_parish( 'weekday_mass' ) ) ); ?></p>
 			</article>
 			<article class="mc sakura">

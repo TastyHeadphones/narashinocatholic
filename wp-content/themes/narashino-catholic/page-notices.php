@@ -9,8 +9,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-get_header();
-
 $paged = isset( $_GET['paged'] ) ? max( 1, absint( wp_unslash( $_GET['paged'] ) ) ) : 1;
 $query = new WP_Query(
 	array(
@@ -20,6 +18,14 @@ $query = new WP_Query(
 		'paged'          => $paged,
 	)
 );
+
+// 最後のページより先を指定されたら、一覧の先頭に戻す（何も表示されないページを作らない）。
+if ( $paged > max( 1, (int) $query->max_num_pages ) ) {
+	wp_safe_redirect( get_permalink( get_queried_object_id() ) );
+	exit;
+}
+
+get_header();
 
 while ( have_posts() ) :
 	the_post();
@@ -49,18 +55,23 @@ while ( have_posts() ) :
 						<?php
 						while ( $query->have_posts() ) :
 							$query->the_post();
-							$tag = nc_notice_meta( '_nc_tag' );
-							$en  = nc_notice_meta( '_nc_title_en' );
+							$tag       = nc_notice_meta( '_nc_tag' );
+							$en        = nc_notice_meta( '_nc_title_en' );
+							$show_date = '1' === nc_notice_meta( '_nc_show_date' );
 							?>
 							<li>
 								<a href="<?php echo esc_url( get_permalink() ); ?>">
 									<span>
-										<span class="meta">
-											<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'Y年n月j日' ) ); ?></time>
-											<?php if ( $tag ) : ?>
-												<span class="tz-tag<?php echo '1' === nc_notice_meta( '_nc_warn' ) ? ' warn' : ''; ?>"><?php echo esc_html( $tag ); ?></span>
-											<?php endif; ?>
-										</span>
+										<?php if ( $show_date || $tag ) : ?>
+											<span class="meta">
+												<?php if ( $show_date ) : ?>
+													<time datetime="<?php echo esc_attr( get_the_date( DATE_W3C ) ); ?>"><?php echo esc_html( get_the_date( 'Y年n月j日' ) ); ?></time>
+												<?php endif; ?>
+												<?php if ( $tag ) : ?>
+													<span class="tz-tag<?php echo '1' === nc_notice_meta( '_nc_warn' ) ? ' warn' : ''; ?>"><?php echo esc_html( $tag ); ?></span>
+												<?php endif; ?>
+											</span>
+										<?php endif; ?>
 										<b><?php echo esc_html( get_the_title() ); ?></b>
 										<?php if ( $en ) : ?>
 											<span class="en"><?php echo esc_html( $en ); ?></span>

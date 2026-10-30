@@ -31,9 +31,10 @@ function nc_parish_defaults() {
 		'weekday_mass'       => '10:00',
 		'confession'         => '毎週日曜日 7:00〜7:20、9:30〜9:50',
 		'cleaning'           => '毎土曜日 10:30〜11:00',
+		'cleaning_en'        => 'Every Saturday, 10:30–11:00',
 		'directions'         => '京成実籾駅(北口）より、毎週日曜日10時のミサの開始時間に合わせて、9時半頃から数回程度、送迎車の用意があります。駐車場が満車の時は、雲人会館駐車場を第二駐車場として利用可能です。',
-		'announcement'       => '10月31日（土）の清掃はお休みです',
-		'announcement_en'    => 'No cleaning on October 31',
+		'announcement'       => '',
+		'announcement_en'    => '',
 	);
 }
 

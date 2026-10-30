@@ -6,8 +6,8 @@
  *   wp eval-file /seed/seed.php
  *
  * 既定では、まだ無いものだけを作成する。管理画面で編集した内容は上書きしない。
- * NC_SEED_FORCE=1 を付けると、固定ページ・お知らせ・メニューを初期内容に戻す
- * （教会情報の設定は上書きしない）。
+ * NC_SEED_FORCE=1 を付けると、固定ページ・お知らせ・メニューを初期内容に戻す。
+ * 同時に、サイト名・キャッチフレーズ・トップページの設定も初期値に戻す（教会情報の設定は残す）。
  *
  * 本文は seed/pages/*.html（レイアウト用の HTML）をそのまま使う。
  * 写真は seed/photos/ のファイルを取り込む（外部のサイトからは取得しない）。
@@ -28,6 +28,29 @@ require_once ABSPATH . 'wp-admin/includes/image.php';
 kses_remove_filters();
 
 /**
+ * 初期データのファイルを読む。必須のファイルが読めなければ止める。
+ * 本文のファイルが無い場合は、警告を出して空の本文にする（ページには「準備中」の案内が出る）。
+ *
+ * @param string $path     ファイルのパス。
+ * @param bool   $required 必須か。
+ * @return string
+ */
+function nc_seed_read( $path, $required = true ) {
+	$contents = file_get_contents( $path );
+
+	if ( false === $contents ) {
+		if ( $required ) {
+			nc_seed_message( '初期データを読み込めません: ' . $path, true );
+		}
+
+		nc_seed_message( '警告: 本文のファイルがありません（空の本文で作成します）: ' . $path );
+		return '';
+	}
+
+	return $contents;
+}
+
+/**
  * 固定ページの定義。親を先に並べること。
  *
  * slug は公式サイトのURLと同じにしてある（旧URLからの移行を簡単にするため）。
@@ -37,7 +60,7 @@ $nc_seed_pages = array(
 	'parish'        => array( 'title' => '教会案内', 'slug' => '教会案内', 'en' => 'About the parish' ),
 	'mass'          => array( 'title' => 'ミサのご案内', 'slug' => 'ミサのご案内', 'parent' => 'parish', 'en' => 'Mass times', 'content' => 'mass.html' ),
 	'monthly'       => array( 'title' => '毎月のお知らせ', 'slug' => '毎月のお知らせ', 'parent' => 'parish', 'en' => 'Monthly notices', 'content' => 'monthly.html' ),
-	'sacraments'    => array( 'title' => '秘跡（SACRAMENTS)', 'slug' => '秘跡-sacraments', 'parent' => 'parish', 'en' => 'Sacraments', 'content' => 'sacraments.html' ),
+	'sacraments'    => array( 'title' => '秘跡（SACRAMENTS）', 'slug' => '秘跡-sacraments', 'parent' => 'parish', 'en' => 'Sacraments', 'content' => 'sacraments.html' ),
 	'courses'       => array( 'title' => '各講座の案内', 'slug' => '各講座の案内', 'parent' => 'parish', 'en' => 'Classes and courses', 'content' => 'courses.html' ),
 	'movable'       => array( 'title' => '年間移動祝日一覧', 'slug' => '年間移動祝日一覧', 'parent' => 'parish', 'en' => 'Movable feasts', 'content' => 'movable.html' ),
 	'calendar'      => array( 'title' => '年間典礼行事予定', 'slug' => '年間典礼行事予定', 'parent' => 'parish', 'en' => 'Liturgical calendar', 'content' => 'calendar.html' ),
@@ -49,13 +72,13 @@ $nc_seed_pages = array(
 	'bible'         => array( 'title' => '聖書講座', 'slug' => '聖書講座', 'en' => 'Bible class', 'content' => 'bible.html' ),
 	'notices'       => array( 'title' => 'お知らせ一覧', 'slug' => 'お知らせ一覧', 'en' => 'Notices', 'template' => 'page-notices.php' ),
 	'cleaning'      => array( 'title' => '教会の清掃の奉仕者・協力者募集', 'slug' => '教会の清掃の奉仕者-協力者募集', 'parent' => 'notices', 'en' => 'Cleaning volunteers', 'content' => 'cleaning.html' ),
-	'contact'       => array( 'title' => 'お問い合せ', 'slug' => 'お問い合せ', 'en' => 'Contact', 'template' => 'page-contact.php', 'content' => 'contact.html' ),
+	'contact'       => array( 'title' => 'お問い合わせ', 'slug' => 'お問い合せ', 'en' => 'Contact', 'template' => 'page-contact.php', 'content' => 'contact.html' ),
 	'links'         => array( 'title' => '外部リンク', 'slug' => '外部リンク', 'en' => 'Links', 'content' => 'links.html' ),
 	'link-list'     => array( 'title' => 'リンク集', 'slug' => 'リンク集', 'parent' => 'links', 'en' => 'Useful links', 'content' => 'link-list.html' ),
 	'english'       => array( 'title' => 'English Page', 'slug' => 'english-page', 'en' => 'English' ),
 	'english-guide' => array( 'title' => 'English Guide', 'slug' => 'english-guide', 'parent' => 'english', 'en' => 'Church guide', 'content' => 'english-guide.html' ),
 	'english-map'   => array( 'title' => 'Map', 'slug' => 'map', 'parent' => 'english', 'en' => 'Directions', 'content' => 'english-map.html' ),
-	'access'        => array( 'title' => 'アクセス（ACCESS)', 'slug' => 'アクセス-access', 'en' => 'Access', 'content' => 'access.html' ),
+	'access'        => array( 'title' => 'アクセス（ACCESS）', 'slug' => 'アクセス-access', 'en' => 'Access', 'content' => 'access.html' ),
 	'privacy'       => array( 'title' => 'プライバシーポリシー', 'slug' => 'プライバシーポリシー', 'en' => 'Privacy policy', 'content' => 'privacy.html' ),
 	'sitemap'       => array( 'title' => 'サイトマップ', 'slug' => 'sitemap', 'en' => 'Sitemap', 'template' => 'page-sitemap.php' ),
 );
@@ -150,7 +173,7 @@ function nc_seed_import_photo( $file, $title, $alt ) {
  * @return array{ids: array<string, int>, manifest: array<string, array{file: string, title: string, alt: string}>}
  */
 function nc_seed_photos( $seed_dir ) {
-	$manifest = json_decode( (string) file_get_contents( $seed_dir . '/photos.json' ), true );
+	$manifest = json_decode( nc_seed_read( $seed_dir . '/photos.json' ), true );
 	$stored   = get_option( 'nc_photo_ids', array() );
 	$ids      = array();
 
@@ -221,7 +244,7 @@ function nc_seed_pages( $pages, $photos, $seed_dir, $force ) {
 
 		if ( ! empty( $spec['content'] ) ) {
 			$content = nc_seed_fill_photos(
-				(string) file_get_contents( $seed_dir . '/pages/' . $spec['content'] ),
+				nc_seed_read( $seed_dir . '/pages/' . $spec['content'], false ),
 				$photos
 			);
 		}
@@ -294,24 +317,17 @@ function nc_seed_link_pages( $pages, $ids ) {
 }
 
 /**
- * お知らせを作成する（既存のお知らせは $force のときだけ更新する）。
+ * お知らせを作成する。既存のお知らせは識別子（_nc_seed_key）で探し、$force のときだけ更新する。
+ * 更新するときも、公開日と投稿者は既存の値を保つ（再実行で並び順や投稿者が変わらないように）。
  *
  * @param string $seed_dir シードのディレクトリ。
  * @param bool   $force    既存の内容を上書きするか。
  */
 function nc_seed_notices( $seed_dir, $force ) {
-	$notices = json_decode( (string) file_get_contents( $seed_dir . '/notices.json' ), true );
+	$notices = json_decode( nc_seed_read( $seed_dir . '/notices.json' ), true );
 
 	foreach ( $notices as $index => $item ) {
-		$existing = get_posts(
-			array(
-				'post_type'      => 'notice',
-				'post_status'    => 'any',
-				'title'          => $item['title'],
-				'posts_per_page' => 1,
-				'fields'         => 'ids',
-			)
-		);
+		$existing = nc_seed_find_notice( $item['key'], $item['title'] );
 
 		if ( $existing && ! $force ) {
 			nc_seed_tally( 'notices', 'kept' );
@@ -327,9 +343,13 @@ function nc_seed_notices( $seed_dir, $force ) {
 		);
 
 		if ( $existing ) {
-			$postarr['ID'] = $existing[0];
+			$post                     = get_post( $existing );
+			$postarr['ID']            = $post->ID;
+			$postarr['post_date']     = $post->post_date;
+			$postarr['post_date_gmt'] = $post->post_date_gmt;
+			$postarr['post_author']   = $post->post_author;
 		} else {
-			// 一覧の順番を保つため、先頭のお知らせほど新しい日付にする。
+			// 一覧の順番を保つため、先頭のお知らせほど新しい日付にする（表示はしない）。
 			$date                     = wp_date( 'Y-m-d H:i:s', time() - $index * HOUR_IN_SECONDS );
 			$postarr['post_date']     = $date;
 			$postarr['post_date_gmt'] = get_gmt_from_date( $date );
@@ -341,6 +361,7 @@ function nc_seed_notices( $seed_dir, $force ) {
 			nc_seed_message( 'お知らせを保存できませんでした: ' . $item['title'] . ' / ' . $id->get_error_message(), true );
 		}
 
+		update_post_meta( $id, '_nc_seed_key', $item['key'] );
 		update_post_meta( $id, '_nc_tag', $item['tag'] );
 		update_post_meta( $id, '_nc_title_en', $item['title_en'] );
 		update_post_meta( $id, '_nc_desc_en', $item['desc_en'] );
@@ -350,6 +371,43 @@ function nc_seed_notices( $seed_dir, $force ) {
 
 		nc_seed_tally( 'notices', $existing ? 'updated' : 'created' );
 	}
+}
+
+/**
+ * 初期データのお知らせを探す。識別子を優先し、無ければタイトルで探す。
+ * ゴミ箱のお知らせも含める（管理者が削除したものを、再実行で作り直さないため）。
+ *
+ * @param string $key   識別子。
+ * @param string $title タイトル。
+ * @return int 投稿ID。見つからなければ 0。
+ */
+function nc_seed_find_notice( $key, $title ) {
+	$statuses = array( 'publish', 'pending', 'draft', 'future', 'private', 'trash' );
+
+	$found = get_posts(
+		array(
+			'post_type'      => 'notice',
+			'post_status'    => $statuses,
+			'posts_per_page' => 1,
+			'fields'         => 'ids',
+			'meta_key'       => '_nc_seed_key',
+			'meta_value'     => $key,
+		)
+	);
+
+	if ( ! $found ) {
+		$found = get_posts(
+			array(
+				'post_type'      => 'notice',
+				'post_status'    => $statuses,
+				'title'          => $title,
+				'posts_per_page' => 1,
+				'fields'         => 'ids',
+			)
+		);
+	}
+
+	return $found ? (int) $found[0] : 0;
 }
 
 /**
@@ -395,7 +453,11 @@ function nc_seed_menu( $name, $location, $items, $force ) {
 			$args['menu-item-url']  = $item['url'];
 		}
 
-		wp_update_nav_menu_item( $menu_id, 0, $args );
+		$item_id = wp_update_nav_menu_item( $menu_id, 0, $args );
+
+		if ( is_wp_error( $item_id ) ) {
+			nc_seed_message( 'メニュー項目を保存できませんでした: ' . $item['title'] . ' / ' . $item_id->get_error_message(), true );
+		}
 	}
 
 	$locations              = get_theme_mod( 'nav_menu_locations', array() );
@@ -416,8 +478,8 @@ nc_seed_menu(
 	'primary',
 	array(
 		array( 'title' => 'ミサ', 'en' => 'Mass', 'page' => $nc_seed_ids['mass'] ),
-		array( 'title' => '教会について', 'en' => 'About', 'url' => home_url( '/#about' ) ),
-		array( 'title' => '活動', 'en' => 'Get involved', 'url' => home_url( '/#community' ) ),
+		array( 'title' => '教会について', 'en' => 'About', 'url' => '/#about' ),
+		array( 'title' => '活動', 'en' => 'Get involved', 'url' => '/#community' ),
 		array( 'title' => 'お知らせ', 'en' => 'News', 'page' => $nc_seed_ids['notices'] ),
 	),
 	$nc_seed_force
@@ -427,9 +489,9 @@ nc_seed_menu(
 	'フッターメニュー',
 	'footer',
 	array(
-		array( 'title' => 'プライバシーポリシー', 'page' => $nc_seed_ids['privacy'] ),
-		array( 'title' => 'サイトマップ', 'page' => $nc_seed_ids['sitemap'] ),
-		array( 'title' => '東京大司教区', 'url' => 'https://tokyo.catholic.jp/' ),
+		array( 'title' => 'プライバシーポリシー', 'en' => 'Privacy policy', 'page' => $nc_seed_ids['privacy'] ),
+		array( 'title' => 'サイトマップ', 'en' => 'Sitemap', 'page' => $nc_seed_ids['sitemap'] ),
+		array( 'title' => '東京大司教区', 'en' => 'Archdiocese of Tokyo', 'url' => 'https://tokyo.catholic.jp/' ),
 	),
 	$nc_seed_force
 );
@@ -443,10 +505,7 @@ if ( $nc_seed_first || $nc_seed_force ) {
 	update_option( 'nc_seeded_at', time() );
 }
 
-// 教会情報は管理画面で編集されることが多いため、無い場合にだけ初期値を入れる。
-if ( false === get_option( NC_PARISH_OPTION ) ) {
-	add_option( NC_PARISH_OPTION, nc_parish_defaults() );
-}
+// 教会情報は初期値を保存しない（コードの初期値を使い、管理画面で入力した値だけを保存する）。
 
 // WordPress の初期データ（サンプル投稿・サンプルページ・プライバシーの下書き）を削除する。
 // 同じ slug でも、初期データの見出しと一致するものだけを対象にする。

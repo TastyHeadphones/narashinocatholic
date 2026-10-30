@@ -1,5 +1,6 @@
 [
   {
+    "key": "cleaning-cancelled-1031",
     "title": "10月31日の清掃はお休みです",
     "tag": "10.31（土）",
     "title_en": "No cleaning on October 31",
@@ -11,6 +12,7 @@
     "link_label": ""
   },
   {
+    "key": "sns-warning",
     "title": "偽のSNSアカウントにご注意ください",
     "tag": "注意",
     "title_en": "Beware of fake social media accounts",
@@ -22,6 +24,7 @@
     "link_label": "東京教区のページ（外部サイト）"
   },
   {
+    "key": "infection-control",
     "title": "今後の感染対策について",
     "tag": "東京大司教区",
     "title_en": "Infection-control measures",

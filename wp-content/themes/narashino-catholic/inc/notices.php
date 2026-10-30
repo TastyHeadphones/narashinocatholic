@@ -9,12 +9,15 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * 追加項目: メタキー => 種類。
+ *
+ * _nc_show_date は、公開日を一覧と詳細に出すかどうか（既定では出さない）。
  */
 const NC_NOTICE_FIELDS = array(
 	'_nc_tag'        => 'text',
 	'_nc_title_en'   => 'text',
 	'_nc_desc_en'    => 'textarea',
 	'_nc_warn'       => 'bool',
+	'_nc_show_date'  => 'bool',
 	'_nc_link_url'   => 'url',
 	'_nc_link_label' => 'text',
 );
@@ -53,15 +56,37 @@ function nc_register_notices() {
 			'notice',
 			$key,
 			array(
-				'type'         => 'bool' === $type ? 'boolean' : 'string',
-				'single'       => true,
+				'type'          => 'bool' === $type ? 'boolean' : 'string',
+				'single'        => true,
 				'show_in_rest' => true,
-				'auth_callback' => static function () {
-					return current_user_can( 'edit_posts' );
-				},
+				'auth_callback' => 'nc_notice_meta_can_edit',
 			)
 		);
 	}
+
+	// 初期データの識別子は画面からは編集しない。
+	register_post_meta(
+		'notice',
+		'_nc_seed_key',
+		array(
+			'type'          => 'string',
+			'single'        => true,
+			'show_in_rest'  => false,
+			'auth_callback' => 'nc_notice_meta_can_edit',
+		)
+	);
+}
+
+/**
+ * お知らせの項目を編集できるかどうか（投稿ごとに判定する）。
+ *
+ * @param bool   $allowed  既定の判定。
+ * @param string $meta_key メタキー。
+ * @param int    $post_id  投稿ID。
+ * @return bool
+ */
+function nc_notice_meta_can_edit( $allowed, $meta_key, $post_id ) {
+	return current_user_can( 'edit_post', $post_id );
 }
 
 add_action( 'add_meta_boxes_notice', 'nc_notices_add_meta_box' );
@@ -102,6 +127,16 @@ function nc_notices_render_meta_box( $post ) {
 						<input type="checkbox" name="nc_notice[_nc_warn]" value="1" <?php checked( $values['_nc_warn'], '1' ); ?>>
 						注意喚起として赤色のラベルで表示する
 					</label>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">日付の表示</th>
+				<td>
+					<label>
+						<input type="checkbox" name="nc_notice[_nc_show_date]" value="1" <?php checked( $values['_nc_show_date'], '1' ); ?>>
+						公開日を一覧と詳細に表示する
+					</label>
+					<p class="description">公式サイトのお知らせには日付がなかったため、既定では表示しません。</p>
 				</td>
 			</tr>
 			<tr>

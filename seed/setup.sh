@@ -11,7 +11,7 @@ WP_PATH=${WP_PATH:-.}
 WP_URL=${WP_URL:-http://localhost:8080}
 WP_TITLE=${WP_TITLE:-カトリック習志野教会}
 WP_ADMIN_USER=${WP_ADMIN_USER:-admin}
-WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-change-me-now}
+WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-}
 WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL:-admin@example.com}
 THEME=narashino-catholic
 
@@ -40,6 +40,13 @@ until [ -f wp-config.php ] && wp db check >/dev/null 2>&1; do
 done
 
 if ! wp core is-installed >/dev/null 2>&1; then
+	if [ -z "$WP_ADMIN_PASSWORD" ] || [ "$WP_ADMIN_PASSWORD" = "change-me-now" ]; then
+		echo "WP_ADMIN_PASSWORD を .env で設定してください（初期値のままでは管理者を作成しません）。" >&2
+		exit 1
+	fi
+	case "$WP_ADMIN_EMAIL" in
+		*example.com) echo "注意: 管理者のメールアドレスが example.com のままです。" >&2 ;;
+	esac
 	wp core install \
 		--url="$WP_URL" \
 		--title="$WP_TITLE" \

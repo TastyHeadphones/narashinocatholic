@@ -322,7 +322,6 @@ a{color:var(--ai);text-decoration-thickness:1px;text-underline-offset:4px}
 
 /* child page list (uses the .quick rows from the home page) */
 .quick.child-list{margin-top:8px}
-.quick.child-list a{grid-template-columns:minmax(0,1fr) 20px}
 
 /* notices list */
 .nlist{list-style:none;margin:0;padding:0;border-top:1px solid rgba(184,146,74,.5)}
@@ -390,7 +389,6 @@ button.btn:disabled{opacity:.6;cursor:progress}
 @media (max-width:600px){
   .nav{gap:0 14px}
   .announce .wrap{padding-left:16px;padding-right:16px}
-  .hero h1{font-size:clamp(40px,11vw,56px)}
 }
 
 /* ---------------------------------------------------------------
@@ -483,3 +481,11 @@ button.btn:disabled{opacity:.6;cursor:progress}
   .prose .info > div{grid-template-columns:minmax(0,1fr);gap:4px}
   .prose .gallery{grid-template-columns:minmax(0,1fr)}
 }
+
+/* fixes from the visual review */
+.announce a .en,.announce .en{margin-left:.4em}
+.announce .en{white-space:nowrap}
+a[href^="tel:"]{white-space:nowrap}
+.mc .sub{display:block;margin:0 0 14px;font-size:15px;line-height:1.8;color:var(--muted)}
+.flinks a .en{margin-left:.5em;font-size:.85em;color:var(--muted)}
+.flinks a:hover .en{color:var(--vermilion)}
