@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 				<p class="label">GET INVOLVED · 活動</p>
 				<h2 class="h2" id="community-title">活動に参加する<span class="en">Ways to serve and belong</span></h2>
 			</div>
-			<p class="lead">教会は、多くの方々の奉仕と支えによって歩んでいます。</p>
+			<p class="lead">教会は、多くの方々の奉仕と支え<span class="nowrap">によって</span>歩んでいます。</p>
 		</div>
 		<div class="act-grid">
 			<a class="act" href="<?php echo esc_url( nc_url( 'cleaning' ) ); ?>">

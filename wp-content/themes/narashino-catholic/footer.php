@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 				</div>
 			</div>
 			<div class="fine">
-				<span>© <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php echo esc_html( nc_parish( 'name_ja' ) ); ?> · <?php echo esc_html( nc_parish( 'name_en' ) ); ?></span>
+				<span>© <?php echo esc_html( wp_date( 'Y' ) ); ?> <?php echo esc_html( nc_parish( 'name_ja' ) ); ?> <span class="nowrap">· <?php echo esc_html( nc_parish( 'name_en' ) ); ?></span></span>
 				<a href="#top">ページの上へ · Back to top</a>
 			</div>
 		</div>
