@@ -506,3 +506,12 @@ a[href^="tel:"]{white-space:nowrap}
   .prose .agenda li{grid-template-columns:88px minmax(0,1fr)}
   .prose .agenda-date .w{white-space:nowrap}
 }
+
+/* fixes from the second visual review: Japanese line breaks, footer wraps, phone numbers */
+.prose p,.prose li,.prose dd,.prose .agenda-title,.prose .agenda-note{word-break:auto-phrase}
+.foot .ph-line{word-break:auto-phrase;text-wrap:pretty}
+.fine span{text-wrap:balance}
+.nowrap{white-space:nowrap}
+@media (max-width:600px){
+  .prose .agenda-month{font-size:22px}
+}

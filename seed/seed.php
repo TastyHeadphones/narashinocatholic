@@ -75,7 +75,7 @@ $nc_seed_pages = array(
 	'contact'       => array( 'title' => 'お問い合わせ', 'slug' => 'お問い合せ', 'en' => 'Contact', 'template' => 'page-contact.php', 'content' => 'contact.html' ),
 	'links'         => array( 'title' => '外部リンク', 'slug' => '外部リンク', 'en' => 'Links', 'content' => 'links.html' ),
 	'link-list'     => array( 'title' => 'リンク集', 'slug' => 'リンク集', 'parent' => 'links', 'en' => 'Useful links', 'content' => 'link-list.html' ),
-	'english'       => array( 'title' => 'English Page', 'slug' => 'english-page', 'en' => 'English' ),
+	'english'       => array( 'title' => '英語のご案内', 'slug' => 'english-page', 'en' => 'English' ),
 	'english-guide' => array( 'title' => 'English Guide', 'slug' => 'english-guide', 'parent' => 'english', 'en' => 'Church guide', 'content' => 'english-guide.html' ),
 	'english-map'   => array( 'title' => 'Map', 'slug' => 'map', 'parent' => 'english', 'en' => 'Directions', 'content' => 'english-map.html' ),
 	'access'        => array( 'title' => 'アクセス（ACCESS）', 'slug' => 'アクセス-access', 'en' => 'Access', 'content' => 'access.html' ),

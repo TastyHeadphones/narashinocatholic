@@ -18,10 +18,10 @@
     "title_en": "Beware of fake social media accounts",
     "excerpt": "菊地枢機卿を名乗り、寄付を求めるアカウントがあります。",
     "desc_en": "Accounts impersonating Cardinal Kikuchi are asking for donations.",
-    "body": "<p>菊地枢機卿を装ったSNSアカウントからの寄付依頼にご注意ください。詳しくは東京教区のページをご覧ください。</p>",
+    "body": "<p>菊地枢機卿を装ったSNSアカウントからの寄付依頼にご注意ください。詳しくは東京大司教区のページをご覧ください。</p>",
     "warn": true,
     "link_url": "https://tokyo.catholic.jp/info/diocese/51557/",
-    "link_label": "東京教区のページ（外部サイト）"
+    "link_label": "東京大司教区のページ（外部サイト）"
   },
   {
     "key": "infection-control",
